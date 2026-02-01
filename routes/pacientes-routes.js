@@ -1,14 +1,18 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-const control = require("../controllers/pacientes-controller");
+const control = require("../controllers/pacientes-controller")
 
 router.get("/", control.mostrarTodos);
 
-router.post("/", control.agregarPaciente);
+router.post("/", control.crearPaciente)
 
-router.get("/", control.buscarPorCedula);
+router.post("/buscar", control.buscarPorCedula)
 
-router.get("/:id", control.buscarPorID);
+router.get("/ultimos", control.ultimosCinco)
+
+router.get("/:id", control.buscarPorID)
+
+router.put("/:cedula", control.actualizarPaciente)
 
 module.exports = router;

@@ -1,5 +1,28 @@
 const pacientes = require("../models/pacientes-model");
 
+
+const validarCedula = (cedula) => {
+  const formato = /^V-\d{6,8}$/;
+  return formato.test(cedula);
+};
+
+const validarFecha = (fecha) => {
+  const formato = /^\d{4}-\d{2}-\d{2}$/;
+  if (!formato.test(fecha)) return false;
+  
+  const fechaObj = new Date(fecha);
+  return fechaObj instanceof Date && !isNaN(fechaObj);
+};
+
+const validarEmail = (email) => {
+  if (!email) return true; // Email es opcional
+  const formato = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return formato.test(email);
+};
+
+
+
+
 // Mostrar todos pacientes registrados (si hay)
 const mostrarTodos = async (req, res) => {
   try {
@@ -9,12 +32,14 @@ const mostrarTodos = async (req, res) => {
       return res.status(200).json({
         message: "Actualmente no hay datos de pacientes guardados",
         data: [],
+        total: 0,
       });
     }
 
     res.status(200).json({
-      "cantidad de pacientes": datos.length,
-      datos: datos,
+      message: `${datos.length} pacientes encontrados`,
+      total: datos.length,
+      data: datos
     });
 
     // Envia una lista de los pacientes guardados en la DB (esto es mejor optimizarlo en la fase 2)
@@ -30,125 +55,195 @@ const mostrarTodos = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       err: "Ocurrio un error al obtener la lista de pacientes",
+      detalle: err.message
     });
   }
 };
 
-// Buscar por cédula de identidad [ARREGLAR]
+//buscar por cedula PA
 const buscarPorCedula = async (req, res) => {
   try {
-    const data = req.query;
-    const cedulaLimpia = data.cedula.trim();
-    const cedulaformato = /^V-\d{6,8}$/;
+    const { cedula } = req.body;
 
-    if (!data || typeof data !== "string") {
-      resolve(null);
-      return;
+    // Validar que se envió cédula
+    if (!cedula) {
+      return res.status(400).json({
+        error: "Cédula requerida",
+        detalle: "Envíe la cédula en el body: {\"cedula\": \"V-12345678\"}"
+      });
     }
 
-    const dataFinal = await pacientes.buscarCedula(data);
+    // Validar formato 
+    if (!validarCedula(cedula)) {
+      return res.status(400).json({
+        error: "Cédula inválida",
+        detalle: "Formato: V-12345678 (6-8 dígitos)"
+      });
+    }
+
+
+    const paciente = await pacientes.buscarCedula(cedula);
+
+    if (!paciente) {
+      return res.status(404).json({
+        error: "Paciente no encontrado",
+        detalle: `No existe paciente con cédula ${cedula}`
+      });
+    }
 
     res.status(200).json({
-      message: "Datos encontrados...",
-      data: dataFinal,
+      message: "Paciente encontrado",
+      data: paciente
     });
+
   } catch (err) {
     res.status(500).json({
-      err: "Error al intentar buscar el paciente",
+      error: "Error al buscar paciente",
+      detalle: err.message
     });
   }
 };
 
 // Agregar nuevo paciente a la bd
-const agregarPaciente = async (req, res) => {
+const crearPaciente = async (req, res) => {
   try {
     const data = req.body;
 
-    // Manejar errores...
-    if (data === "" || data === undefined) {
-      (res.status(400).json({
-        message: "Ingrese los datos correctamente",
-        data: req.body,
-      }),
-        console.log("Algo pasó."));
-    }
-    if (!data.cedula) {
-      return (
-        res.status(400).json({
-          message: "La cédula es requerida",
-          data: req.body,
-        }),
-        console.log("Algo pasó.")
-      );
-    }
-    const cedulaLimpia = data.cedula;
-    const cedulaformato = /^V-\d{6,8}$/;
-
-    if (!cedulaformato.test(cedulaLimpia)) {
-      return (
-        res.status(400).json({
-          message: "La cédula debe tener de 6 a 8 dígitos",
-          data: req.body,
-        }),
-        console.log("Algo pasó.")
-      );
-    }
-
-    const camposRequeridos = ["nombre", "apellido", "fechaNacimiento"];
-
-    const faltantes = camposRequeridos.filter((campo) => !data[campo]);
-
-    if (faltantes.length > 0) {
-      return (
-        res.status(400).json({
-          message: `Faltan campos requeridos: ${faltantes.join(", ")}`,
-          data: req.body,
-        }),
-        console.log("Algo pasó.")
-      );
-    }
-
-    const fechaRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (data.fechaNacimiento && !fechaRegex.test(data.fechaNacimiento)) {
+    // Validar que hay datos
+    if (!data || Object.keys(data).length === 0) {
       return res.status(400).json({
-        message: "La fecha de nacimiento debe estar en formato YYYY-MM-DD",
-        data: req.body,
+        error: "Datos requeridos",
+        detalle: "Envíe los datos del paciente en formato JSON"
       });
     }
-    console.log(data);
 
-    // Transforma data
-    const dataFinal = await pacientes.crearPaciente(data);
+    // Validar campos 
+    const obligatorios = ["cedula", "nombre", "apellido", "fechaNacimiento"];
+    const faltantes = obligatorios.filter(campo => !data[campo]);
+    
+    if (faltantes.length > 0) {
+      return res.status(400).json({
+        error: "Campos obligatorios faltantes",
+        detalle: `Faltan: ${faltantes.join(", ")}`
+      });
+    }
 
+    // Validar formato 
+    if (!validarCedula(data.cedula)) {
+      return res.status(400).json({
+        error: "Cédula inválida",
+        detalle: "Formato: V-12345678 (6-8 dígitos)"
+      });
+    }
+
+    // Verificar existencia
+    const existe = await pacientes.buscarCedula(data.cedula);
+    if (existe) {
+      return res.status(409).json({
+        error: "Cédula duplicada",
+        detalle: `La cédula ${data.cedula} ya está registrada`
+      });
+    }
+
+    // Validar fecha 
+    if (!validarFecha(data.fechaNacimiento)) {
+      return res.status(400).json({
+        error: "Fecha inválida",
+        detalle: "Use formato YYYY-MM-DD"
+      });
+    }
+
+    // Validar email aunque no obligatorio 
+    if (data.email && !validarEmail(data.email)) {
+      return res.status(400).json({
+        error: "Email invalido",
+        detalle: "Use formato valido: usuario@dominio.com"
+      });
+    }
+
+    const pacienteCreado = await pacientes.crearPaciente(data);
+    
     res.status(201).json({
-      message: "Los nuevos datos fueron ingresados correctamente",
-      data: dataFinal,
+      message: "Paciente creado exitosamente",
+      data: pacienteCreado
     });
+
   } catch (err) {
     res.status(500).json({
-      err: "Error al intentar ingresar los datos",
+      error: "Error al crear paciente",
+      detalle: err.message
     });
   }
 };
 
-// Borrar paciente de la bd [en proceso]
-const borrarPaciente = async (req, res) => {
+// Borrar paciente de la bd 
+const eliminarPaciente = async (req, res) => {
   try {
-  } catch (err) {}
+    const { cedula } = req.params;
+
+    // Validar formato 
+    if (!validarCedula(cedula)) {
+      return res.status(400).json({
+        error: "Cédula inválida",
+        detalle: "Formato: V-12345678"
+      });
+    }
+
+    // Verificar 
+    const pacienteExistente = await pacientes.buscarCedula(cedula);
+    if (!pacienteExistente) {
+      return res.status(404).json({
+        error: "Paciente no encontrado",
+        detalle: `No existe paciente con cédula ${cedula}`
+      });
+    }
+
+    const pacienteEliminado = await pacientes.delete(cedula);
+    
+    res.status(200).json({
+      message: "Paciente eliminado exitosamente",
+      data: pacienteEliminado
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: "Error al eliminar paciente",
+      detalle: err.message
+    });
+  }
 };
 
-// Buscar los ultimos 5 pacientes
-const buscarUltimosCinco = async (req, res) => {};
 
+// Buscar los ultimos 5 pacientes
+const ultimosCinco = async (req, res) => {
+  try {
+    const ultimos = await pacientes.ultimosCinco();
+    
+    res.status(200).json({
+      message: "Últimos 5 pacientes registrados",
+      total: ultimos.length,
+      data: ultimos
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: "Error al obtener últimos pacientes",
+      detalle: err.message
+    });
+  }
+};
+
+//buscar por id
 const buscarPorID = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
+    // Validar longitud del ID
     if (!id || id.length !== 5) {
-        return res.status(400).json({
-            error: "Paciente no encontrado",
-            detalle: "El ID no puede ser mayor ni menor a 5 (cinco) dígitos."
-        });
+      return res.status(400).json({
+        error: "ID inválido",
+        detalle: "El ID debe tener exactamente 5 caracteres"
+      });
     }
 
     const paciente = await pacientes.buscarId(id);
@@ -156,22 +251,108 @@ const buscarPorID = async (req, res) => {
     if (!paciente) {
       return res.status(404).json({
         error: "Paciente no encontrado",
-        detalle: `No existe ningún registro que coincida con el prefijo ${id}`,
+        detalle: `No existe paciente con ID que empiece por ${id}`
       });
     }
 
     res.status(200).json({
-      mensaje: "Paciente localizado",
-      datos: paciente,
+      message: "Paciente encontrado",
+      data: paciente
     });
+
   } catch (err) {
-    res.status(500).json({ error: "Error en el servidor" });
+    res.status(500).json({
+      error: "Error al buscar paciente",
+      detalle: err.message
+    });
   }
 };
 
+//actualizar paciente 
+const actualizarPaciente = async (req, res) => {
+  try {
+    const { cedula } = req.params;
+    const nuevosDatos = req.body;
+
+    // Validar formato de cédula en URL
+    if (!validarCedula(cedula)) {
+      return res.status(400).json({
+        error: "Cédula inválida en URL",
+        detalle: "Formato: V-12345678"
+      });
+    }
+
+    const pacienteExistente = await pacientes.buscarCedula(cedula);
+    if (!pacienteExistente) {
+      return res.status(404).json({
+        error: "Paciente no encontrado",
+        detalle: `No existe paciente con cédula ${cedula}`
+      });
+    }
+
+    // Si se quiere cambiar la cédula, validar
+    if (nuevosDatos.cedula && nuevosDatos.cedula !== cedula) {
+      if (!validarCedula(nuevosDatos.cedula)) {
+        return res.status(400).json({
+          error: "Nueva cédula inválida",
+          detalle: "Formato: V-12345678"
+        });
+      }
+
+      // Verificar si nueva cédula ya existe
+      const existeNuevaCedula = await pacientes.buscarCedula(nuevosDatos.cedula);
+      if (existeNuevaCedula) {
+        return res.status(409).json({
+          error: "Cédula duplicada",
+          detalle: `La cédula ${nuevosDatos.cedula} ya está registrada`
+        });
+      }
+    }
+
+    if (nuevosDatos.fechaNacimiento && !validarFecha(nuevosDatos.fechaNacimiento)) {
+      return res.status(400).json({
+        error: "Fecha inválida",
+        detalle: "Use formato YYYY-MM-DD"
+      });
+    }
+
+    if (nuevosDatos.email && !validarEmail(nuevosDatos.email)) {
+      return res.status(400).json({
+        error: "Email inválido",
+        detalle: "Use formato válido"
+      });
+    }
+
+    const pacienteActualizado = await pacientes.actualizar(cedula, nuevosDatos);
+    
+    if (!pacienteActualizado) {
+      return res.status(500).json({
+        error: "Error al actualizar",
+        detalle: "No se pudo actualizar el paciente"
+      });
+    }
+
+    res.status(200).json({
+      message: "Paciente actualizado exitosamente",
+      data: pacienteActualizado
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: "Error al actualizar paciente",
+      detalle: err.message
+    });
+  }
+};
+
+
+
 module.exports = {
   mostrarTodos,
-  agregarPaciente,
+  crearPaciente,
   buscarPorCedula,
   buscarPorID,
+  actualizarPaciente,
+  eliminarPaciente,
+  ultimosCinco
 };
