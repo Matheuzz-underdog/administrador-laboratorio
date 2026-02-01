@@ -10,10 +10,12 @@ const { readFile } = require("fs");
 
 var app = express();
 
+const colors = require('colors');
 const pjson = require("./package.json");
 
-// Determina si esta en production o development (Recuerda consultar al profesor si esto se usa/se hace asi)
 process.argv[2] = "dev";
+
+// Determina si esta en production o development (Recuerda consultar al profesor si esto se usa/se hace asi)
 
 if (process.argv[2] && process.argv[2] === "dev") {
   process.env.NODE_ENV = "development";

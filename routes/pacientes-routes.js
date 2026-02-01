@@ -9,6 +9,6 @@ router.post("/", control.agregarPaciente);
 
 router.get("/", control.buscarPorCedula);
 
-router.get("/:id)", control.buscarPorID);
+router.get("/:id", control.buscarPorID);
 
 module.exports = router;

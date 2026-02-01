@@ -144,6 +144,13 @@ const buscarPorID = async (req, res) => {
   try {
     const id = req.params.id;
 
+    if (!id || id.length !== 5) {
+        return res.status(400).json({
+            error: "Paciente no encontrado",
+            detalle: "El ID no puede ser mayor ni menor a 5 (cinco) dígitos."
+        });
+    }
+
     const paciente = await pacientes.buscarId(id);
 
     if (!paciente) {
