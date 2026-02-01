@@ -9,3 +9,4 @@ Estudiantes de cuarto trimestre de Ingeniería en Computación
 
 frase que no tiene nada que ver con nada pero estoy cansado de los `controllers` y necesito distraerme escribiendo algo más que código...
 : liganguliguliwacha lingangú lingagú liganguliguliwacha lingangú lingagú
+: tututututuutututuututtu apaaoreirmefe jodeerrrr a      a a a a 
