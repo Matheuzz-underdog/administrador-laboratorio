@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const control = require("../controllers/clientes-controller");
 
+//mostrara todos
 router.get("/", async (req, res) => {
   try {
     const datos = await control.mostrarTodos();
@@ -37,6 +38,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// crear cliente
 router.post("/", async (req, res) => {
   try {
     const clienteCreado = await control.crearCliente(req.body);
@@ -60,6 +62,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// buscar por cedula
 router.post("/buscar", async (req, res) => {
   try {
     const cliente = await control.buscarPorCedula(req.body.cedula);
@@ -83,6 +86,7 @@ router.post("/buscar", async (req, res) => {
   }
 });
 
+// mostrar ultimos 5
 router.get("/ultimos", async (req, res) => {
   try {
     const ultimos = await control.ultimosCinco();
@@ -100,6 +104,7 @@ router.get("/ultimos", async (req, res) => {
   }
 });
 
+// buscar por id
 router.get("/:id", async (req, res) => {
   try {
     const cliente = await control.buscarPorID(req.params.id);
@@ -123,6 +128,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// actualizar cliente
 router.put("/:cedula", async (req, res) => {
   try {
     const clienteActualizado = await control.actualizarCliente(
@@ -149,6 +155,7 @@ router.put("/:cedula", async (req, res) => {
   }
 });
 
+// eliminar cliente 
 router.delete("/:cedula", async (req, res) => {
   try {
     const clienteEliminado = await control.eliminarCliente(req.params.cedula);
