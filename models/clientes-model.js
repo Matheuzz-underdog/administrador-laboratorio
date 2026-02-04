@@ -1,4 +1,4 @@
-const laboratorio = require(`../db/database`);
+const laboratorio = require(`../db/clientes-db`);
 const { v4: uuidv4 } = require("uuid");
 
 class clientes {

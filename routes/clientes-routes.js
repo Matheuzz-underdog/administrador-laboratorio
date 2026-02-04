@@ -156,9 +156,9 @@ router.put("/:cedula", async (req, res) => {
 });
 
 // eliminar cliente 
-router.delete("/:cedula", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
-    const clienteEliminado = await control.eliminarCliente(req.params.cedula);
+    const clienteEliminado = await control.eliminarCliente(req.body.cedula);
 
     res.status(200).json({
       message: "Cliente eliminado exitosamente",

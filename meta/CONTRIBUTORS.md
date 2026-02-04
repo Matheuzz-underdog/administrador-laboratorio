@@ -1,4 +1,4 @@
-#### Proyecto de gestión de Laboratorio 
+ #### Proyecto de gestión de Laboratorio 
 ###### Universidad Valle del Momboy, BackEnd 2026-A
 ---
 Este proyecto está siendo realizado por: 
@@ -11,4 +11,5 @@ frase que no tiene nada que ver con nada pero estoy cansado de los `controllers`
 : liganguliguliwacha lingangú lingagú liganguliguliwacha lingangú lingagú
 : tututututuutututuututtu apaaoreirmefe jodeerrrr a      a a a a 
 : un video mas mi gente quien quiera perder su tiempo qu elo pierda wasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-:falsefalsefalseflaseflaseflase true
+: falsefalsefalseflaseflaseflase true
+: 0.0000000000000000001% de chance de `(true, true, true)`, 0.5% fe
