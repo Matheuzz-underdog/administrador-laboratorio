@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Empleados</title>
+</head>
+<body>
+    <%- include('header') %>
+    
+    <h1>Lista de Empleados</h1>
+    
+    <p>Total de empleados: <%= empleados.length %></p>
+    
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Cargo</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Activo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% empleados.forEach(function(empleado) { %>
+            <tr>
+                <td><%= empleado.cedula %></td>
+                <td><%= empleado.nombre %></td>
+                <td><%= empleado.apellido %></td>
+                <td><%= empleado.cargo %></td>
+                <td><%= empleado.telefono %></td>
+                <td><%= empleado.email %></td>
+                <td><%= empleado.activo ? 'Sí' : 'No' %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+    <br>
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

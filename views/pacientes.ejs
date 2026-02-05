@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pacientes</title>
+</head>
+<body>
+    <%- include('header') %>
+    
+    <h1>Lista de Pacientes</h1>
+    
+    <p>Total de pacientes: <%= pacientes.length %></p>
+    
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Sexo</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Dirección</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% pacientes.forEach(function(paciente) { %>
+            <tr>
+                <td><%= paciente.cedula %></td>
+                <td><%= paciente.nombre %></td>
+                <td><%= paciente.apellido %></td>
+                <td><%= paciente.sexo %></td>
+                <td><%= paciente.fechaNacimiento %></td>
+                <td><%= paciente.telefono %></td>
+                <td><%= paciente.email %></td>
+                <td><%= paciente.direccion %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+    <br>
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

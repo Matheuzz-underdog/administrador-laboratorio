@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Exámenes</title>
+</head>
+<body>
+    <%- include('header') %>
+    
+    <h1>Lista de Exámenes</h1>
+    
+    <p>Total de exámenes: <%= examenes.length %></p>
+    
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Abreviatura</th>
+                <th>Nombre</th>
+                <th>Área</th>
+                <th>Precio ($)</th>
+                <th>Tipo de Muestra</th>
+                <th>Parámetros</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% examenes.forEach(function(examen) { %>
+            <tr>
+                <td><%= examen.abreviatura %></td>
+                <td><%= examen.nombre %></td>
+                <td><%= examen.area %></td>
+                <td><%= examen.precio %></td>
+                <td><%= examen.tipoMuestra %></td>
+                <td><%= examen.parametros.length %> parámetros</td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+    <br>
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

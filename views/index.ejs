@@ -7,10 +7,21 @@
     <title><%= title %></title>
   </head>
   <body>
-    <%- include('partials/_header') %>
-    <div class="index-title">
-      <h1>Sistema: <%= title %></h1>
-      <p>Bienvenido a <%= title %></p>
-    </div>
+    <%- include('header') %>
+      
+      <h1>Bienvenido al <%= title %></h1>
+      
+      <h3>Opciones del Sistema:</h3>
+      <ul>
+        <li><a href="/pacientes/vista">Ver lista de Pacientes</a></li>
+        <li><a href="/empleados/vista">Ver lista de Empleados</a></li>
+        <li><a href="/exam/vista">Ver lista de Exámenes</a></li>
+      </ul>
+      
+      <hr>
+      
+      <h3>Información:</h3>
+      <p>Sistema de gestión de laboratorio clínico</p>
+      <p>Desarrollado Por Jose Godoy , Sergio cuevas y Nelson Sandoval</p>
   </body>
 </html>
