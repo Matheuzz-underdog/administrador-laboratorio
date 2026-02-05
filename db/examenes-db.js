@@ -1,5 +1,3 @@
-const examenes = {
-    
-};
+const examenes = {};
 
 module.exports = examenes;
