@@ -4,13 +4,15 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-var indexRouter = require("./routes/index.js");
-var clientesRouter = require("./routes/clientes-routes.js");
+var indexRouter = require("./routes/index-routes");
+var pacientesRouter = require("./routes/pacientes-routes");
+var empleadosRouter = require("./routes/empleados-routes");
+
 const { readFile } = require("fs");
 
 var app = express();
 
-const colors = require('colors');
+const colors = require("colors");
 const pjson = require("./package.json");
 
 process.argv[2] = "dev";
@@ -36,7 +38,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", clientesRouter);
+app.use("/pacientes", pacientesRouter);
+app.use("/empleados", empleadosRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
