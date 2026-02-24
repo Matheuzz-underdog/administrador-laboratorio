@@ -19,7 +19,9 @@ El sistema debe ser capaz de:
 7. Eliminar la relación entre elementos de dos o más entidades.
 8. Modificar datos de una entidad.
 
-- [ ] *Fase completada* 
+- [X] *Fase completada* 
+
+## Fase 2: 
 
 > Durante el desarrollo del proyecto, se buscará actualizar este archivo con las fases actualizadas, modificadas, y completadas.
 

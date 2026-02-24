@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const control = require("../controllers/examenes-controller");
-const examenes = require('../connections/examenes-db');
 
 // Es obvio lo que hace
 
@@ -13,7 +12,7 @@ router.get("/", async (req, res) => {
       return res.status(200).json({
         message: "Actualmente no hay datos de exámenes guardados",
         data: [],
-        total: 0, 
+        total: 0,
       });
     }
 

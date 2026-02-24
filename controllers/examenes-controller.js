@@ -17,7 +17,7 @@ class Controller {
     }
 
     const examen = await examenes.buscarExamen(abbrevEnv);
-
+    console.log("examen:", examen);
     if (!examen) {
       throw {
         status: 404,
@@ -63,13 +63,14 @@ class Controller {
         detalle: `Faltan: ${faltantes.join(", ")}`,
       };
     }
+    const existeNombre = await examenes.existeNombre(dataEnv.nombre);
 
-    const existe = await examenes.buscarExamen(dataEnv.abreviatura);
-    if (existe) {
+    const existeAbreviatura = await examenes.buscarExamen(dataEnv.abreviatura);
+    if (existeAbreviatura || existeNombre) {
       throw {
         status: 409,
-        error: "Abreviatura duplicada",
-        detalle: `La abreviatura ${dataEnv.abreviatura} ya está registrada (checkear si el tipo de examen ya existe/está mal registrado)`,
+        error: "El examen que está intentando ingresar ya existe",
+        detalle: `Verifique si ya existe el tipo de examen que está intentando añadir`,
       };
     }
 

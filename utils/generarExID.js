@@ -1,11 +1,14 @@
 const generar = (listaExamenes) => {
-  if (listaExamenes.length === 0) return "ex-001";
+  if (listaExamenes.length === 0) return "EX0001";
 
-  const numeros = listaExamenes.map((ex) => parseInt(ex.id.split("-")[1]));
+  const numeros = listaExamenes.map((ex) => {
+    const match = ex.id_examen.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  });
   const maxNumero = Math.max(...numeros);
 
   const nuevoNumero = maxNumero + 1;
-  return `ex-${nuevoNumero.toString().padStart(3, "0")}`;
+  return `EX${nuevoNumero.toString().padStart(4, "0")}`;
 }
 
 module.exports = generar;
