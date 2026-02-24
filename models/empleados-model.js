@@ -1,4 +1,4 @@
-const empleados = require(`../db/empleados-db`);
+const empleados = require('../connections/empleados-db');
 const { v4: uuidv4 } = require("uuid");
 
 class Empleados {

@@ -55,6 +55,7 @@ router.post("/", async (req, res) => {
 // buscar por cedula
 router.post("/buscar", async (req, res) => {
   try {
+    const cedulaLimpia = req.body.cedula?.trim() 
     const pacientes = await control.buscarPorCedula(req.body.cedula);
 
     res.status(200).json({
@@ -76,13 +77,13 @@ router.post("/buscar", async (req, res) => {
   }
 });
 
-// mostrar ultimos 5
+// mostrar ultimos 20
 router.get("/ultimos", async (req, res) => {
   try {
-    const ultimos = await control.ultimosCinco();
+    const ultimos = await control.ultimosveinte();
 
     res.status(200).json({
-      message: "Últimos 5 pacientes registrados",
+      message: "Últimos 20 pacientes registrados",
       total: ultimos.length,
       data: ultimos,
     });

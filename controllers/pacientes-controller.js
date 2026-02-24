@@ -61,8 +61,8 @@ class Controller {
     return paciente;
   }
 
-  static async ultimosCinco() {
-    const ultimos = await pacientes.ultimosCinco();
+  static async ultimosveinte() {
+    const ultimos = await pacientes.ultimosveinte();
     return ultimos;
   }
 
@@ -170,14 +170,16 @@ class Controller {
         detalle: `No existe paciente con cédula ${cedula}`,
       };
     }
-    const sexosValidos = ["M", "F"];
 
-    if (!sexosValidos.includes(nuevosDatos.sexo)) {
-      throw {
-        status: 400,
-        error: "Valor de sexo inválido",
-        detalle:  "Use 'M' para Masculino o 'F' para Femenino.",
-      };
+    if (nuevosDatos.sexo !== undefined) {
+      const sexosValidos = ["M", "F"];
+      if (!sexosValidos.includes(nuevosDatos.sexo)) {
+        throw {
+          status: 400,
+          error: "Valor de sexo inválido",
+          detalle: "Use 'M' para Masculino o 'F' para Femenino.",
+        };
+      }
     }
 
     if (nuevosDatos.cedula && nuevosDatos.cedula !== cedula) {
@@ -224,9 +226,9 @@ class Controller {
 
     if (!pacienteActualizado) {
       throw {
-        status: 500,
-        error: "Error al actualizar",
-        detalle: "No se pudo actualizar el paciente",
+        status: 400,
+        error: "Sin campos para actualizar",
+        detalle: "Envíe al menos un campo válido para actualizar",
       };
     }
 

@@ -1,4 +1,4 @@
-const examenes = require(`../db/examenes-db`);
+const examenes = require('../connections/examenes-db');
 const generar = require("../utils/generarExID");
 
 class Examenes {
