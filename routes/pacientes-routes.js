@@ -6,20 +6,7 @@ const control = require("../controllers/pacientes-controller");
 router.get("/", async (req, res) => {
   try {
     const datos = await control.mostrarTodos();
-
-    if (datos.length === 0) {
-      return res.status(200).json({
-        message: "Actualmente no hay datos de pacientes guardados",
-        data: [],
-        total: 0,
-      });
-    }
-
-    res.status(200).json({
-      message: `${datos.length} pacientes encontrados`,
-      total: datos.length,
-      data: datos,
-    });
+    res.render("pacientes", { pacientes: datos.reverse() });
   } catch (err) {
     res.status(500).json({
       error: "Ocurrio un error al obtener la lista de pacientes",
@@ -56,7 +43,7 @@ router.post("/", async (req, res) => {
 router.post("/buscar", async (req, res) => {
   try {
     const cedulaLimpia = req.body.cedula?.trim() 
-    const pacientes = await control.buscarPorCedula(req.body.cedula);
+    const pacientes = await control.buscarPorCedula(cedulaLimpia);
 
     res.status(200).json({
       message: "Paciente encontrado",
@@ -78,11 +65,11 @@ router.post("/buscar", async (req, res) => {
 });
 
 // mostrar ultimos 20
-router.get("/ultimos", async (req, res) => {
+/*router.get("/ultimos", async (req, res) => {
   try {
     const ultimos = await control.ultimosveinte();
 
-    res.status(200).json({
+    res.status(200).json({ 
       message: "Últimos 20 pacientes registrados",
       total: ultimos.length,
       data: ultimos,
@@ -93,7 +80,7 @@ router.get("/ultimos", async (req, res) => {
       detalle: err.message,
     });
   }
-});
+});*/
 
 // buscar por id
 router.get("/:id", async (req, res) => {
@@ -168,6 +155,6 @@ router.delete("/", async (req, res) => {
       detalle: err.message,
     });
   }
-});
+}); 
 
 module.exports = router;
