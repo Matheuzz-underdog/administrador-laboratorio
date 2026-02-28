@@ -8,7 +8,7 @@ var indexRouter = require("./routes/index-routes");
 var pacientesRouter = require("./routes/pacientes-routes");
 var empleadosRouter = require("./routes/empleados-routes");
 var examenesRouter = require("./routes/examenes-routes");
-// var vistasRouter = require("./routes/vistas-routes")
+// 
 var ordenesRouter = require("./routes/ordenes-routes");
 
 const { readFile } = require("fs");
@@ -44,8 +44,7 @@ app.use("/", indexRouter);
 app.use("/pacientes", pacientesRouter);
 app.use("/empleados", empleadosRouter);
 app.use("/exam", examenesRouter);
-// app.use("/vistas", vistasRouter)
-app.use("/ordenes", ordenesRouter);
+app.use("/vistas", vistasRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
