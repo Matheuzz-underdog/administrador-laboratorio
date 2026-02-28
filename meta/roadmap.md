@@ -19,9 +19,21 @@ El sistema debe ser capaz de:
 7. Eliminar la relación entre elementos de dos o más entidades.
 8. Modificar datos de una entidad.
 
-- [X] *Fase completada* 
+- [x] *Fase completada* 
 
-## Fase 2: 
+## Fase 2: Almacenamiento e Interfaces
+
+Desarrolle las funciones y endpoints necesarios para cubrir lo indicado en la actividad anterior pero esta vez con almacenamiento persistente en una base de datos.
+
+Agregue vistas al sistema, al menos para las operaciones `CRUD` de dos entidades. En otras palabras, cree las interfaces gráficas (en html y css) accesibles desde el navegador para crear, ver, editar y eliminar información relacionada con 2 entidades de su base de datos.
+
+En general:
+1. Se deben usar protocolos HTTP (`GET`, `PUT`, `POST` y `DELETE`).
+2. Se deben de utilizar Clases.
+3. Se deben usar promesas.
+4. Utilice la Base de Datos de su preferencia.
+
+- [ ] *Fase completada*
 
 > Durante el desarrollo del proyecto, se buscará actualizar este archivo con las fases actualizadas, modificadas, y completadas.
 
