@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const control = require("../controllers/pacientes-controller");
+const control = require("../controllers/pacientes.controller");
 
 //mostrara todos
 router.get("/", async (req, res) => {

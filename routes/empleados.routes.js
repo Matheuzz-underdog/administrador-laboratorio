@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const control = require("../controllers/empleados-controller");
+const control = require("../controllers/empleados.controller");
 
 // Mostrar todos los empleados
 

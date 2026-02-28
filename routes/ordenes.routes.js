@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const detallesOrden = require("../controllers/ordenes-ctrls/detalles-controller");
-const serviciosOrden = require("../controllers/ordenes-ctrls/servicios-controller");
+const detallesOrden = require("../controllers/ordenes-ctrls/detalles.controller");
+const serviciosOrden = require("../controllers/ordenes-ctrls/servicios.controller");
 
 // Ver todas las ordenes dentro de la database
 router.get("/", async (req, res) => {
