@@ -41,9 +41,6 @@ class Examenes {
         }
       );
     });
-
-    const [examenEliminado] = examenes.splice(examenIndex, 1);
-    return examenEliminado;
   }
 
   static async existeNombre(name) {

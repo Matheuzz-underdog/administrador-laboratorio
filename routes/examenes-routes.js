@@ -15,12 +15,7 @@ router.get("/", async (req, res) => {
         total: 0,
       });
     }
-
-    res.status(200).json({
-      message: `Actualmente hay  ${datos.length} exámenes registrados`,
-      data: datos,
-      total: datos.length,
-    });
+    res.render("examenes", {examenes: datos});
   } catch (err) {
     res.status(500).json({
       error: "Ocurrio un error al obtener la lista de examenes",
@@ -34,7 +29,6 @@ router.get("/", async (req, res) => {
 router.get("/:abbrev", async (req, res) => {
   try {
     const examenDeseado = await control.buscarExamenDeseado(req.params.abbrev);
-
     res.status(200).json({
       message: `Se encontró el examen con la abreviatura deseada`,
       data: examenDeseado,
