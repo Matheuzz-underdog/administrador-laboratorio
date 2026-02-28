@@ -107,7 +107,7 @@ class Pacientes {
     } catch (error) {
       throw new Error(`Error al buscar paciente por ID: ${error.message}`);
     }
-  }
+  } 
 
   static async ultimosveinte() {
     try {
